@@ -2,21 +2,21 @@ import 'package:expenses_app/components/chart/chart.dart';
 import 'package:expenses_app/components/lista_despesas.dart';
 import 'package:expenses_app/injections/custom_injection.dart';
 import 'package:expenses_app/models/despesas.dart';
-import 'package:expenses_app/pages/adicionar_despesa/adicionar_despesa_page.dart';
-import 'package:expenses_app/pages/pagina_inicial/pagina_inicial_controller.dart';
+import 'package:expenses_app/modules/controllers/despesas_controller.dart';
+import 'package:expenses_app/modules/views/adicionar_despesa_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class PaginaInicial extends StatefulWidget {
-  const PaginaInicial({super.key});
+class DespesasPage extends StatefulWidget {
+  const DespesasPage({super.key});
 
   @override
-  State<PaginaInicial> createState() => _PaginaInicialState();
+  State<DespesasPage> createState() => _DespesasPageState();
 }
 
-class _PaginaInicialState extends State<PaginaInicial> {
-  final controller = getIt<PaginaInicialController>();
+class _DespesasPageState extends State<DespesasPage> {
+  final controller = getIt<DespesasController>();
   bool enabled = true;
 
   @override
@@ -88,7 +88,7 @@ class _PaginaInicialState extends State<PaginaInicial> {
                         ? ListaDeDespesas(
                             despesas: despesas,
                             onRemoveDespesa: (despesa) {
-                              controller.excluirDespesa(despesa);
+                              controller.onPressedExcluir(despesa);
                             },
                           )
                         : const Center(

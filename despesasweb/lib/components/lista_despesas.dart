@@ -2,7 +2,7 @@ import 'package:expenses_app/components/chart/chart_controller.dart';
 import 'package:expenses_app/injections/custom_injection.dart';
 import 'package:expenses_app/models/despesas.dart';
 import 'package:expenses_app/components/despesas_card.dart';
-import 'package:expenses_app/pages/pagina_inicial/pagina_inicial_controller.dart';
+import 'package:expenses_app/modules/controllers/despesas_controller.dart';
 import 'package:flutter/material.dart';
 
 class ListaDeDespesas extends StatefulWidget {
@@ -17,7 +17,7 @@ class ListaDeDespesas extends StatefulWidget {
 }
 
 class _ListaDeDespesasState extends State<ListaDeDespesas> {
-  final controller = getIt<PaginaInicialController>();
+  final controller = getIt<DespesasController>();
 
   late final ChartController chartController;
 

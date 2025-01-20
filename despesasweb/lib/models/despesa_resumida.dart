@@ -3,18 +3,18 @@ import 'package:json_annotation/json_annotation.dart';
 import '../enums/forma_pagamento.dart';
 import '../enums/tipo_despesa.dart';
 
-part 'despesas.g.dart';
+part 'despesa_resumida.g.dart';
 
 @JsonSerializable()
-class Despesas {
-  Despesas(
-      {required this.idDespesa,
-      required this.descricao,
-      required this.nomeDespesa,
-      required this.valor,
+class DespesaResumida {
+  DespesaResumida(
+      {required this.categoria,
       required this.data,
-      required this.categoria,
-      required this.formaPagamento});
+      required this.descricao,
+      required this.formaPagamento,
+      required this.idDespesa,
+      required this.nomeDespesa,
+      required this.valor});
 
   String idDespesa;
   final String nomeDespesa;
@@ -24,8 +24,8 @@ class Despesas {
   final String descricao;
   final FormaPagamento formaPagamento;
 
-  Map<String, dynamic> toJson() => _$DespesasToJson(this);
+  Map<String, dynamic> toJson() => _$DespesaResumidaToJson(this);
 
-  factory Despesas.fromJson(Map<String, dynamic> json) =>
-      _$DespesasFromJson(json);
+  factory DespesaResumida.fromJson(Map<String, dynamic> json) =>
+      _$DespesaResumidaFromJson(json);
 }

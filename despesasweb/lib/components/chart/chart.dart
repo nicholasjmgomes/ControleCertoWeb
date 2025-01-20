@@ -1,8 +1,9 @@
 import 'package:expenses_app/components/chart/chart_bar.dart';
 import 'package:expenses_app/components/chart/chart_controller.dart';
-import 'package:expenses_app/enums/tipo_despesa.dart';
 import 'package:flutter/material.dart';
 import 'package:expenses_app/models/despesas.dart';
+
+import '../../variaveis_globais.dart';
 
 class Chart extends StatelessWidget {
   const Chart({super.key, required this.despesas});

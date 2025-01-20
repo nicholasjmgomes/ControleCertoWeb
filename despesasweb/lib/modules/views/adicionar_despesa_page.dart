@@ -5,8 +5,8 @@ import 'package:expenses_app/components/dropdown.dart';
 import 'package:expenses_app/components/text_box.dart';
 import 'package:expenses_app/components/title.dart';
 import 'package:expenses_app/injections/custom_injection.dart';
-import 'package:expenses_app/pages/adicionar_despesa/adicionar_despesa_controller.dart';
 import 'package:expenses_app/enums/tipo_despesa.dart';
+import 'package:expenses_app/modules/controllers/despesas_controller.dart';
 import 'package:expenses_app/validacao/validadores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,17 +21,16 @@ class AdicionarDespesa extends StatefulWidget {
 }
 
 class _AdicionarDespesaState extends State<AdicionarDespesa> {
-  late var controller = getIt<AdicionarDespesaController>();
+  late var controller = getIt<DespesasController>();
 
   @override
   void initState() {
     super.initState();
-    controller = AdicionarDespesaController();
+    controller = DespesasController();
   }
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
   }
 
@@ -144,17 +143,16 @@ class _AdicionarDespesaState extends State<AdicionarDespesa> {
                           ),
                           Expanded(
                             child: ListenableBuilder(
-                              listenable: controller.despesaEscolhidaNotifier,
+                              listenable: controller.tipoDespesaNotifier,
                               builder: (context, child) {
                                 return Dropdown<TipoDespesa?>(
-                                  value:
-                                      controller.despesaEscolhidaNotifier.value,
+                                  value: controller.tipoDespesaNotifier.value,
                                   items: TipoDespesa.values,
                                   itemToString: (TipoDespesa? value) =>
                                       value!.nome,
                                   onChanged: (TipoDespesa? newValue) =>
-                                      controller.despesaEscolhidaNotifier
-                                          .value = newValue!,
+                                      controller.tipoDespesaNotifier.value =
+                                          newValue!,
                                 );
                               },
                             ),

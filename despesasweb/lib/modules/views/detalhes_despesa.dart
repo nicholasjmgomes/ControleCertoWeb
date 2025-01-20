@@ -1,6 +1,6 @@
 import 'package:expenses_app/injections/custom_injection.dart';
 import 'package:expenses_app/models/despesas.dart';
-import 'package:expenses_app/pages/pagina_inicial/pagina_inicial_controller.dart';
+import 'package:expenses_app/modules/controllers/despesas_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,7 +14,7 @@ class DetalhesDespesa extends StatefulWidget {
 }
 
 class _DetalhesDespesaState extends State<DetalhesDespesa> {
-  final controller = getIt<PaginaInicialController>();
+  final controller = getIt<DespesasController>();
   late List<Despesas> despesas;
 
   @override
@@ -55,7 +55,7 @@ class _DetalhesDespesaState extends State<DetalhesDespesa> {
                       style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '',
+                      controller.nomeDespesaController.text,
                       style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
                     ),
                   ],

@@ -1,14 +1,24 @@
-import 'package:expenses_app/injections/custom_injection.dart';
 import 'package:flutter/material.dart';
-import 'package:expenses_app/pages/pagina_inicial/pagina_inicial.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import 'injections/custom_injection.dart';
+import 'routes/routes.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializar locais suportados pela biblioteca intl
+  await initializeDateFormatting('pt_BR', null);
   customInjection();
-  runApp(
-    MaterialApp(
-        theme: ThemeData().copyWith(
-            scaffoldBackgroundColor: const Color.fromARGB(255, 221, 232, 241)),
-        debugShowCheckedModeBanner: false,
-        home: const PaginaInicial()),
-  );
+  runApp(const DespesasMobile());
+}
+
+class DespesasMobile extends StatelessWidget {
+  const DespesasMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+        debugShowCheckedModeBanner: false, routerConfig: Routes.router);
+  }
 }

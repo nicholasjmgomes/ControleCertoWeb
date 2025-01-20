@@ -14,14 +14,16 @@ class Formatadores {
   }
 
   static TextInputFormatter valor() {
-    return FilteringTextInputFormatter.allow(
-      RegExp(
-        r'[0-9.,]',
-      ),
-    );
+    return TextInputFormatter.withFunction((oldValue, newValue) {
+      final text = newValue.text.replaceAll(',', '.');
+      return TextEditingValue(
+        text: text,
+        selection: newValue.selection,
+      );
+    });
   }
 
   static String dataFormatada(DateTime data) {
-    return DateFormat("dd MMM yyyy").format(data);
+    return DateFormat("dd MMM yyyy", "pt_BR").format(data);
   }
 }

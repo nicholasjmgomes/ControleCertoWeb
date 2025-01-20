@@ -1,11 +1,10 @@
 import 'package:expenses_app/components/botao_excluir.dart';
 import 'package:expenses_app/models/despesas.dart';
-import 'package:expenses_app/pages/detalhes_despesa/detalhes_despesa.dart';
+import 'package:expenses_app/modules/views/detalhes_despesa.dart';
 import 'package:expenses_app/utils/formatadores.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../enums/tipo_despesa.dart';
+import '../variaveis_globais.dart';
 
 class DespesasCard extends StatelessWidget {
   const DespesasCard(this.despesa,

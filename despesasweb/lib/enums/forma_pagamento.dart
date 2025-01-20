@@ -2,15 +2,15 @@ import 'package:expenses_app/enums/enum_nomeado.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../../utils/extensao_enum.dart';
 
-enum TipoDespesa implements EnumNomeado {
-  @JsonValue("alimentacao")
-  alimentacao("Alimentação"),
-  @JsonValue("trabalho")
-  trabalho("Trabalho"),
-  @JsonValue("viagem")
-  viagem("Viagem"),
-  @JsonValue("lazer")
-  lazer("Lazer");
+enum FormaPagamento implements EnumNomeado {
+  @JsonValue("pix")
+  pix("Pix"),
+  @JsonValue("debito")
+  debito("Débito"),
+  @JsonValue("credito")
+  credito("Crédito"),
+  @JsonValue("dinheiro")
+  dinheiro("Dinheiro");
 
   @override
   final String nome;
@@ -19,12 +19,12 @@ enum TipoDespesa implements EnumNomeado {
   String pegaValorEnum([bool capitalizeFirst = true]) =>
       retornaValorDoEnumString(capitalizeFirst);
 
-  const TipoDespesa(this.nome);
+  const FormaPagamento(this.nome);
 
   String toJson() => toString().split('.').last;
 
-  static TipoDespesa fromJson(String json) {
-    return TipoDespesa.values.firstWhere(
+  static FormaPagamento fromJson(String json) {
+    return FormaPagamento.values.firstWhere(
       (e) => e.toString().split('.').last.toLowerCase() == json.toLowerCase(),
       orElse: () => throw ArgumentError('Tipo de despesa desconhecida: $json'),
     );
