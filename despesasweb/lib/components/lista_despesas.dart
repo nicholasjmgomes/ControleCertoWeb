@@ -30,6 +30,8 @@ class _ListaDeDespesasState extends State<ListaDeDespesas> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 1.5,
@@ -43,6 +45,9 @@ class _ListaDeDespesasState extends State<ListaDeDespesas> {
             chartController.getColorForTipoDespesa(despesa.categoria);
 
         return DespesasCard(
+          onEditDespesa: (despesa) {
+            controller.onPressedEditar(context, despesa.id);
+          },
           despesa,
           onRemoveDespesa: widget.onRemoveDespesa,
           cardColor: cardColor,

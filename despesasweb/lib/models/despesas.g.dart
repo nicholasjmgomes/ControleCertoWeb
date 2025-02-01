@@ -7,7 +7,7 @@ part of 'despesas.dart';
 // **************************************************************************
 
 Despesas _$DespesasFromJson(Map<String, dynamic> json) => Despesas(
-      idDespesa: json['idDespesa'] as String,
+      id: json['id'] as int,
       descricao: json['descricao'] as String,
       nomeDespesa: json['nomeDespesa'] as String,
       valor: (json['valor'] as num).toDouble(),
@@ -18,7 +18,7 @@ Despesas _$DespesasFromJson(Map<String, dynamic> json) => Despesas(
     );
 
 Map<String, dynamic> _$DespesasToJson(Despesas instance) => <String, dynamic>{
-      'idDespesa': instance.idDespesa,
+      'id': instance.id,
       'nomeDespesa': instance.nomeDespesa,
       'valor': instance.valor,
       'data': instance.data.toIso8601String(),
@@ -28,15 +28,15 @@ Map<String, dynamic> _$DespesasToJson(Despesas instance) => <String, dynamic>{
     };
 
 const _$TipoDespesaEnumMap = {
-  TipoDespesa.alimentacao: 'alimentacao',
-  TipoDespesa.trabalho: 'trabalho',
-  TipoDespesa.viagem: 'viagem',
-  TipoDespesa.lazer: 'lazer',
+  TipoDespesa.alimentacao: 'Alimentacao',
+  TipoDespesa.trabalho: 'Trabalho',
+  TipoDespesa.viagem: 'Viagem',
+  TipoDespesa.lazer: 'Lazer',
 };
 
 const _$FormaPagamentoEnumMap = {
-  FormaPagamento.pix: 'pix',
-  FormaPagamento.debito: 'debito',
-  FormaPagamento.credito: 'credito',
-  FormaPagamento.dinheiro: 'dinheiro',
+  FormaPagamento.pix: 'Pix',
+  FormaPagamento.debito: 'Debito',
+  FormaPagamento.credito: 'Credito',
+  FormaPagamento.dinheiro: 'Dinheiro',
 };

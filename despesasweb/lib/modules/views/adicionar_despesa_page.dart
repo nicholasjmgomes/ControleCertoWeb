@@ -4,6 +4,7 @@ import 'package:expenses_app/components/botao_salvar.dart';
 import 'package:expenses_app/components/dropdown.dart';
 import 'package:expenses_app/components/text_box.dart';
 import 'package:expenses_app/components/title.dart';
+import 'package:expenses_app/enums/forma_pagamento.dart';
 import 'package:expenses_app/injections/custom_injection.dart';
 import 'package:expenses_app/enums/tipo_despesa.dart';
 import 'package:expenses_app/modules/controllers/despesas_controller.dart';
@@ -66,9 +67,10 @@ class _AdicionarDespesaState extends State<AdicionarDespesa> {
                       height: 15,
                     ),
                     Row(
+                      spacing: 20,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Expanded(
+                        Flexible(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -94,32 +96,53 @@ class _AdicionarDespesaState extends State<AdicionarDespesa> {
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 18.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ValueListenableBuilder<DateTime?>(
-                                  valueListenable:
-                                      controller.dataEscolhidaNotifier,
-                                  builder: (context, dataEscolhida, child) {
-                                    return Text(
-                                      dataEscolhida == null
-                                          ? 'Escolher data'
-                                          : controller.formatter
-                                              .format(dataEscolhida),
-                                    );
-                                  },
-                                ),
-                                IconButton(
-                                  onPressed: () =>
-                                      controller.dataSelecionada(context),
-                                  icon: const Icon(Icons.calendar_month),
-                                ),
-                              ],
-                            ),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const TitleText('Forma de pagamento'),
+                              ListenableBuilder(
+                                listenable:
+                                    controller.pagamentoEscolhidoNotifier,
+                                builder: (context, child) {
+                                  return Dropdown<FormaPagamento?>(
+                                    value: controller
+                                        .pagamentoEscolhidoNotifier.value,
+                                    items: FormaPagamento.values,
+                                    itemToString: (FormaPagamento? value) =>
+                                        value!.nome,
+                                    onChanged: (FormaPagamento? newValue) =>
+                                        controller.pagamentoEscolhidoNotifier
+                                            .value = newValue!,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Flexible(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ValueListenableBuilder<DateTime?>(
+                                valueListenable:
+                                    controller.dataEscolhidaNotifier,
+                                builder: (context, dataEscolhida, child) {
+                                  return Text(
+                                    dataEscolhida == null
+                                        ? 'Escolher data'
+                                        : controller.formatter
+                                            .format(dataEscolhida),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                onPressed: () =>
+                                    controller.dataSelecionada(context),
+                                icon: const Icon(Icons.calendar_month),
+                              ),
+                            ],
                           ),
                         ),
                       ],

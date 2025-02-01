@@ -13,7 +13,7 @@ DespesaResumida _$DespesaResumidaFromJson(Map<String, dynamic> json) =>
       descricao: json['descricao'] as String,
       formaPagamento:
           $enumDecode(_$FormaPagamentoEnumMap, json['formaPagamento']),
-      idDespesa: json['idDespesa'] as String,
+      id: json['id'] as int,
       nomeDespesa: json['nomeDespesa'] as String,
       valor: (json['valor'] as num).toDouble(),
     );
@@ -24,7 +24,7 @@ Map<String, dynamic> _$DespesaResumidaToJson(DespesaResumida instance) =>
       'data': instance.data.toIso8601String(),
       'descricao': instance.descricao,
       'formaPagamento': _$FormaPagamentoEnumMap[instance.formaPagamento],
-      'idDespesa': instance.idDespesa,
+      'id': instance.id,
       'nomeDespesa': instance.nomeDespesa,
       'valor': instance.valor,
     };

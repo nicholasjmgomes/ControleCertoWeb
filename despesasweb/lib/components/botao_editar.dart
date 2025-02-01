@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class BotaoExcluir extends StatelessWidget {
-  const BotaoExcluir({required this.onPressed, super.key});
+class BotaoEditar extends StatelessWidget {
+  const BotaoEditar({required this.onPressed, super.key});
 
   final void Function() onPressed;
 
@@ -13,13 +13,16 @@ class BotaoExcluir extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.delete_rounded, color: Colors.redAccent),
+          Icon(
+            Icons.edit_document,
+            color: Color.fromARGB(255, 3, 8, 77),
+          ),
           SizedBox(
             width: 4,
           ),
           Text(
-            'Excluir',
-            style: TextStyle(color: Colors.redAccent),
+            'Editar',
+            style: TextStyle(color: Colors.lightBlue),
           ),
         ],
       ),

@@ -12,11 +12,11 @@ class DespesaResumida {
       required this.data,
       required this.descricao,
       required this.formaPagamento,
-      required this.idDespesa,
+      required this.id,
       required this.nomeDespesa,
       required this.valor});
 
-  String idDespesa;
+  int id;
   final String nomeDespesa;
   final double valor;
   final DateTime data;

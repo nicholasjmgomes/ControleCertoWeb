@@ -3,13 +3,13 @@ import 'package:json_annotation/json_annotation.dart';
 import '../../utils/extensao_enum.dart';
 
 enum FormaPagamento implements EnumNomeado {
-  @JsonValue("pix")
+  @JsonValue("Pix")
   pix("Pix"),
-  @JsonValue("debito")
+  @JsonValue("Debito")
   debito("Débito"),
-  @JsonValue("credito")
+  @JsonValue("Credito")
   credito("Crédito"),
-  @JsonValue("dinheiro")
+  @JsonValue("Dinheiro")
   dinheiro("Dinheiro");
 
   @override

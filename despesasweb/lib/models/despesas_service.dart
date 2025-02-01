@@ -10,10 +10,11 @@ class DespesasService {
     final response = await http.get(Uri.parse(DespesasEndpoints.getDespesas()));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic>? data = json.decode(response.body);
+      debugPrint(response.body);
+      final List<dynamic> data = json.decode(response.body);
 
       if (data != null) {
-        return data.values.map<Despesas>((json) {
+        return data.map<Despesas>((json) {
           return Despesas.fromJson(json as Map<String, dynamic>);
         }).toList();
       } else {
@@ -24,10 +25,10 @@ class DespesasService {
     }
   }
 
-  Future<DespesaResumida> getDespesaEspecifica(String idDespesa) async {
+  Future<DespesaResumida> getDespesaEspecifica(int id) async {
     final response = await http.get(
       Uri.parse(
-        DespesasEndpoints.getDespesaEspecifica(idDespesa),
+        DespesasEndpoints.getDespesaEspecifica(id),
       ),
     );
 
@@ -42,7 +43,7 @@ class DespesasService {
 
   Future<void> saveDespesa(Despesas despesa) async {
     final response = await http.put(
-      Uri.parse(DespesasEndpoints.saveDespesa(despesa.idDespesa)),
+      Uri.parse(DespesasEndpoints.saveDespesa(despesa.id)),
       body: jsonEncode(despesa.toJson()),
       headers: {'Content-Type': 'application/json'},
     );
@@ -52,9 +53,9 @@ class DespesasService {
     }
   }
 
-  Future<void> deleteDespesa(String idDespesa) async {
+  Future<void> deleteDespesa(int id) async {
     final response = await http.delete(
-      Uri.parse(DespesasEndpoints.deleteDespesa(idDespesa)),
+      Uri.parse(DespesasEndpoints.deleteDespesa(id)),
     );
 
     if (response.statusCode != 200) {
@@ -64,7 +65,7 @@ class DespesasService {
 
   Future<void> updateDespesa(Despesas despesa) async {
     final response = await http.patch(
-      Uri.parse(DespesasEndpoints.updateDespesa(despesa.idDespesa)),
+      Uri.parse(DespesasEndpoints.updateDespesa(despesa.id)),
       body: jsonEncode(despesa.toJson()),
       headers: {'Content-Type': 'application/json'},
     );

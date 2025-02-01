@@ -3,13 +3,13 @@ import 'package:json_annotation/json_annotation.dart';
 import '../../utils/extensao_enum.dart';
 
 enum TipoDespesa implements EnumNomeado {
-  @JsonValue("alimentacao")
+  @JsonValue("Alimentacao")
   alimentacao("Alimentação"),
-  @JsonValue("trabalho")
+  @JsonValue("Trabalho")
   trabalho("Trabalho"),
-  @JsonValue("viagem")
+  @JsonValue("Viagem")
   viagem("Viagem"),
-  @JsonValue("lazer")
+  @JsonValue("Lazer")
   lazer("Lazer");
 
   @override
