@@ -7,7 +7,6 @@ import '../../components/salvamento_sucesso.dart';
 import '../../enums/forma_pagamento.dart';
 import '../../enums/tipo_despesa.dart';
 import '../../mixins/mensageria.dart';
-import '../../models/despesa_resumida.dart';
 import '../../models/despesas.dart';
 import '../../models/despesas_service.dart';
 import '../../models/total_despesas.dart';
@@ -32,8 +31,8 @@ class DespesasController with Mensageria {
   final ValueNotifier<FormaPagamento?> pagamentoEscolhidoNotifier =
       ValueNotifier<FormaPagamento?>(null);
 
-  final ValueNotifier<DespesaResumida?> despesaParaEdicaoNotifier =
-      ValueNotifier<DespesaResumida?>(null);
+  final ValueNotifier<Despesas?> despesaParaEdicaoNotifier =
+      ValueNotifier<Despesas?>(null);
 
   final formatter = DateFormat("dd/MM/yyyy");
 
@@ -86,22 +85,16 @@ class DespesasController with Mensageria {
         : dataEscolhidaNotifier.value = agora;
   }
 
-  Future<void> onPressedEditar(BuildContext context, int id) async {
-    final despesaResumida = await carregarDespesaParaEdicao(id);
+  Future<void> onPressedEditar(BuildContext context, int despesaId) async {
+    final Despesas despesaParaEdicao =
+        despesas.firstWhere((despesa) => despesa.id == despesaId);
+
+    await carregarDespesaParaEdicao(despesaParaEdicao);
 
     await showDialog(
       context: context,
-      builder: (BuildContext context) => const EditarDespesa(),
+      builder: (BuildContext context) => EditarDespesa(),
     );
-
-    final despesaEditada = Despesas(
-        id: id,
-        descricao: despesaResumida.descricao,
-        nomeDespesa: despesaResumida.nomeDespesa,
-        valor: despesaResumida.valor,
-        data: despesaResumida.data,
-        categoria: despesaResumida.categoria,
-        formaPagamento: despesaResumida.formaPagamento);
   }
 
   Future<void> onPressedSalvar() async {
@@ -124,7 +117,7 @@ class DespesasController with Mensageria {
     }
 
     final despesa = Despesas(
-      id: despesaParaEdicaoNotifier.value!.id,
+      id: despesaParaEdicaoNotifier.value?.id ?? 0,
       nomeDespesa: nomeDespesaController.text,
       valor: valorEnviado,
       data: dataEscolhidaNotifier.value!,
@@ -135,44 +128,42 @@ class DespesasController with Mensageria {
 
     try {
       if (despesaParaEdicaoNotifier.value != null) {
-        await despesaService.updateDespesa(despesa);
+        await despesaService.editarDespesa(despesa);
       } else {
         await despesaService.saveDespesa(despesa);
       }
       await fetchDespesas();
-      isLoadingNotifier.value = false;
     } catch (e) {
       isLoadingNotifier.value = false;
       const CustomSnackbar(mensagem: 'Não foi possível salvar a despesa!');
     }
+    limparCampos();
     isLoadingNotifier.value = false;
   }
 
   Future<void> onPressedExcluir(Despesas despesa) async {
     isLoadingNotifier.value = true;
     try {
-      await despesaService.deleteDespesa(
-        despesa.id,
-      );
+      await despesaService.deleteDespesa(despesa.id);
       await fetchDespesas();
-      isLoadingNotifier.value = false;
     } catch (e) {
       throw Exception('Não foi possível excluir a despesa.');
+    } finally {
+      isLoadingNotifier.value = false;
     }
-    isLoadingNotifier.value = false;
   }
 
-  Future<DespesaResumida> carregarDespesaParaEdicao(int idDespesa) async {
+  Future<Despesas> carregarDespesaParaEdicao(Despesas despesa) async {
     try {
-      final result = await DespesasService().getDespesaEspecifica(idDespesa);
+      final result = await DespesasService().getDespesaEspecifica(despesa.id);
       despesaParaEdicaoNotifier.value = result;
 
-      final despesaResumida = DespesaResumida(
+      final despesaResumida = Despesas(
           categoria: result.categoria,
           data: result.data,
           descricao: result.descricao,
           formaPagamento: result.formaPagamento,
-          id: idDespesa,
+          id: despesa.id,
           nomeDespesa: result.nomeDespesa,
           valor: result.valor);
 
@@ -209,7 +200,7 @@ class DespesasController with Mensageria {
 
   Future<void> fetchDespesas() async {
     final List<Despesas> despesas = await despesaService.fetchDespesas();
-    despesasNotifier.value = despesas;
+    despesasNotifier.value = List.from(despesas);
   }
 
   void toastExclusaoSucesso(BuildContext context) {

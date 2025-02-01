@@ -1,18 +1,18 @@
 import 'package:expenses_app/components/base_drawer.dart';
-import 'package:expenses_app/components/botao_cancelar.dart';
-import 'package:expenses_app/components/botao_salvar.dart';
-import 'package:expenses_app/components/dropdown.dart';
-import 'package:expenses_app/components/text_box.dart';
-import 'package:expenses_app/components/title.dart';
-import 'package:expenses_app/enums/forma_pagamento.dart';
-import 'package:expenses_app/injections/custom_injection.dart';
-import 'package:expenses_app/enums/tipo_despesa.dart';
-import 'package:expenses_app/modules/controllers/despesas_controller.dart';
-import 'package:expenses_app/validacao/validadores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import '../../components/botao_cancelar.dart';
+import '../../components/botao_data.dart';
+import '../../components/botao_salvar.dart';
+import '../../components/dropdown.dart';
+import '../../components/title.dart';
+import '../../enums/forma_pagamento.dart';
+import '../../enums/tipo_despesa.dart';
+import '../../injections/custom_injection.dart';
 import '../../utils/formatadores.dart';
+import '../../validacao/validadores.dart';
+import '../controllers/despesas_controller.dart';
+import '../../components/text_box.dart';
 
 class EditarDespesa extends StatefulWidget {
   const EditarDespesa({super.key});
@@ -25,198 +25,227 @@ class _EditarDespesaState extends State<EditarDespesa> {
   final controller = getIt<DespesasController>();
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Drawer(
-      width: 550,
-      shape: const BeveledRectangleBorder(),
-      child: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const BaseDrawer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+    return Form(
+      key: controller.formKey,
+      child: GestureDetector(
+        onTap: FocusScope.of(context).unfocus,
+        child: Dialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(18),
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height,
+                maxWidth: 400,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const TitleText('Nome da despesa'),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: TextBox(
-                      controller: controller.nomeDespesaController,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) => Validadores.nome(value),
+                  const Header(
+                    texto: 'Editar despesa',
+                    padding: EdgeInsets.only(left: 95),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(18),
+                      topRight: Radius.circular(18),
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    spacing: 20,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const TitleText('Valor da despesa'),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: TextBox(
-                                controller: controller.valorDespesaController,
-                                prefixText: 'R\$ ',
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
-                                inputFormatters: [
-                                  Formatadores.valor(),
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25.0,
+                        vertical: 20,
+                      ),
+                      child: Column(
+                        spacing: 20,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const TitleText('Nome da despesa'),
+                              TextBox(
+                                controller: controller.nomeDespesaController,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
-                                validator: (value) => Validadores.valor(value!),
+                                validator: (value) => Validadores.nome(value),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const TitleText('Forma de pagamento'),
-                            ListenableBuilder(
-                              listenable: controller.pagamentoEscolhidoNotifier,
-                              builder: (context, child) {
-                                return Dropdown<FormaPagamento?>(
-                                  value: controller
-                                      .pagamentoEscolhidoNotifier.value,
-                                  items: FormaPagamento.values,
-                                  itemToString: (FormaPagamento? value) =>
-                                      value!.nome,
-                                  onChanged: (FormaPagamento? newValue) =>
-                                      controller.pagamentoEscolhidoNotifier
-                                          .value = newValue!,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ValueListenableBuilder<DateTime?>(
-                              valueListenable: controller.dataEscolhidaNotifier,
-                              builder: (context, dataEscolhida, child) {
-                                return Text(
-                                  dataEscolhida == null
-                                      ? 'Escolher data'
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const TitleText('Valor'),
+                                    TextBox(
+                                      controller:
+                                          controller.valorDespesaController,
+                                      prefixText: 'R\$ ',
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      inputFormatters: [
+                                        Formatadores.valor(),
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      validator: (value) =>
+                                          Validadores.valor(value!),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              ValueListenableBuilder(
+                                valueListenable:
+                                    controller.dataEscolhidaNotifier,
+                                builder: (context, dataEscolhida, child) =>
+                                    BotaoData(
+                                  dataEscolhida: dataEscolhida == null
+                                      ? controller.formatter
+                                          .format(DateTime.now())
                                       : controller.formatter
                                           .format(dataEscolhida),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              onPressed: () =>
-                                  controller.dataSelecionada(context),
-                              icon: const Icon(Icons.calendar_month),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const TitleText('Tipo de despesa'),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 260),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            left: 15,
+                                  onTap: () =>
+                                      controller.dataSelecionada(context),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Expanded(
-                          child: ListenableBuilder(
-                            listenable: controller.tipoDespesaNotifier,
-                            builder: (context, child) {
-                              return Dropdown<TipoDespesa?>(
-                                value: controller.tipoDespesaNotifier.value,
-                                items: TipoDespesa.values,
-                                itemToString: (TipoDespesa? value) =>
-                                    value!.nome,
-                                onChanged: (TipoDespesa? newValue) => controller
-                                    .tipoDespesaNotifier.value = newValue!,
-                              );
-                            },
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const TitleText('Tipo'),
+                                    ListenableBuilder(
+                                      listenable:
+                                          controller.tipoDespesaNotifier,
+                                      builder: (context, child) {
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.8,
+                                          ),
+                                          child: Dropdown<TipoDespesa>(
+                                            value: controller
+                                                .tipoDespesaNotifier.value,
+                                            items: TipoDespesa.values,
+                                            itemToString:
+                                                (TipoDespesa? value) =>
+                                                    value!.nome,
+                                            onChanged:
+                                                (TipoDespesa? newValue) =>
+                                                    controller
+                                                        .tipoDespesaNotifier
+                                                        .value = newValue!,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                child: Column(
+                                  children: [
+                                    const TitleText('Pagamento'),
+                                    ListenableBuilder(
+                                      listenable:
+                                          controller.tipoDespesaNotifier,
+                                      builder: (context, child) {
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.45,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 14.0),
+                                            child: Dropdown<FormaPagamento>(
+                                              value: controller
+                                                  .pagamentoEscolhidoNotifier
+                                                  .value,
+                                              items: FormaPagamento.values,
+                                              itemToString:
+                                                  (FormaPagamento? value) =>
+                                                      value!.nome,
+                                              onChanged: (FormaPagamento?
+                                                      newValue) =>
+                                                  controller
+                                                      .pagamentoEscolhidoNotifier
+                                                      .value = newValue!,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  const TitleText('Descrição da despesa'),
-                  SizedBox(
-                    height: 220,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 15.0,
-                        right: 15.0,
-                        bottom: 20,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const TitleText('Descrição da despesa'),
+                              TextBox(
+                                controller:
+                                    controller.descricaoDespesaController,
+                                maxLength: 200,
+                                validator: (value) =>
+                                    Validadores.descricao(value),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              CancelarBotao(
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              BotaoSalvar(
+                                text: 'Salvar',
+                                onPressed: () {
+                                  final isValid = controller
+                                          .formKey.currentState
+                                          ?.validate() ??
+                                      false;
+                                  if (isValid) {
+                                    controller.onPressedSalvar();
+                                    Navigator.pop(context);
+                                    controller.toastDeSucesso(context);
+                                  }
+                                  return;
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      child: TextBox(
-                        controller: controller.descricaoDespesaController,
-                        maxLines: 30,
-                        maxLength: 200,
-                        validator: (value) => Validadores.descricao(value),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        CancelarBotao(
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        BotaoSalvar(
-                          text: 'Salvar',
-                          onPressed: () {
-                            controller.onPressedSalvar();
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:expenses_app/models/despesas.dart';
+
 class DespesasEndpoints {
   static const String baseUrl = 'https://localhost:44300/api/despesas/';
 
@@ -9,11 +11,7 @@ class DespesasEndpoints {
     return '$baseUrl$idDespesa';
   }
 
-  static String saveDespesa(int idDespesa) {
-    return '$baseUrl$idDespesa';
-  }
-
-  static String createDespesa() {
+  static String saveDespesa(Despesas despesa) {
     return baseUrl;
   }
 
@@ -21,7 +19,7 @@ class DespesasEndpoints {
     return '$baseUrl$idDespesa';
   }
 
-  static String updateDespesa(int idDespesa) {
-    return '$baseUrl$idDespesa';
+  static String updateDespesa(Despesas despesa) {
+    return baseUrl;
   }
 }
