@@ -1,5 +1,4 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:expenses_app/modules/views/editar_despesa.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -13,6 +12,7 @@ import '../../models/despesas.dart';
 import '../../models/despesas_service.dart';
 import '../../models/total_despesas.dart';
 import '../views/adicionar_despesa_page.dart';
+import '../views/editar_despesa.dart';
 
 class DespesasController with Mensageria {
   final nomeDespesaController = TextEditingController();
@@ -69,7 +69,7 @@ class DespesasController with Mensageria {
     });
   }
 
-  void dataSelecionada(BuildContext context) async {
+  Future<void> dataSelecionada(BuildContext context) async {
     final agora = DateTime.now();
     final primeiraData = DateTime(agora.year - 1, agora.month, agora.day);
     final dataIndicada = await showCalendarDatePicker2Dialog(
@@ -83,7 +83,7 @@ class DespesasController with Mensageria {
     );
     dataIndicada != null && dataIndicada.isNotEmpty
         ? dataEscolhidaNotifier.value = dataIndicada.first
-        : dataEscolhidaNotifier.value = null;
+        : dataEscolhidaNotifier.value = agora;
   }
 
   Future<void> onPressedEditar(BuildContext context, int id) async {
@@ -162,9 +162,9 @@ class DespesasController with Mensageria {
     isLoadingNotifier.value = false;
   }
 
-  Future<DespesaResumida> carregarDespesaParaEdicao(int id) async {
+  Future<DespesaResumida> carregarDespesaParaEdicao(int idDespesa) async {
     try {
-      final result = await DespesasService().getDespesaEspecifica(id);
+      final result = await DespesasService().getDespesaEspecifica(idDespesa);
       despesaParaEdicaoNotifier.value = result;
 
       final despesaResumida = DespesaResumida(
@@ -172,7 +172,7 @@ class DespesasController with Mensageria {
           data: result.data,
           descricao: result.descricao,
           formaPagamento: result.formaPagamento,
-          id: id,
+          id: idDespesa,
           nomeDespesa: result.nomeDespesa,
           valor: result.valor);
 
@@ -199,7 +199,7 @@ class DespesasController with Mensageria {
     pagamentoEscolhidoNotifier.value = null;
   }
 
-  static String gerarid() {
+  static String gerarIdDespesa() {
     return const Uuid().v4();
   }
 
